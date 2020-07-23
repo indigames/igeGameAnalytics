@@ -68,6 +68,8 @@ file(GLOB SRC
 
 set(INCLUDES
     "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${IGE_LIBS}/json/include"
+    "${IGE_LIBS}/json/include/json"
     "${PYTHON_INCLUDE_DIRS}"
 )
 

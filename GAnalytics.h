@@ -32,19 +32,29 @@
 		#define LOG_ERROR(...) printf(__VA_ARGS__);
 	#endif
 #endif
+#include "json.hpp"
+using json = nlohmann::json;
 
 class GameAnalyticsImpl;
 class IGE_EXPORT GAnalytics
 {
+	enum EGAProgressionStatus
+	{
+		Start = 1,
+		Complete = 2,
+		Fail = 3
+	};
+
 public:
 	GAnalytics();
 	~GAnalytics();
-	void init(const char* version, const char* game_key, const char* secret_key, bool debug = false);
+	void init(const char* version, const char* game_key, const char* secret_key, bool debug = false, bool auto_test = false);
 	void release();
 	void addProgressionEvent(int progressionStatus, const char* progression01, const char* progression02, const char* progression03);
 	void addProgressionEvent(int progressionStatus, const char* progression01, const char* progression02, const char* progression03, int score);
 	void addDesignEvent(const char* eventId);
 	void addDesignEvent(const char* eventId, double value);
+	json dumpInfo() { return info_json; }
 
 	static GAnalytics* Instance()
 	{
@@ -56,5 +66,9 @@ public:
 	}
 private:
 	GameAnalyticsImpl* m_gameAnalyticsImpl;
+
+	json info_json;
+	bool m_autoTest;
+	
 	static GAnalytics* instance;
 };

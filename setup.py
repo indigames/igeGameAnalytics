@@ -19,17 +19,31 @@ from codecs import open
 from os import path
 here = path.abspath(path.dirname(__file__))
 
+# Looks for igeLibs in current project libs
+igeLibsPath = 'igeLibs'
+
+# Looks for global environment variable
+if not path.exists(igeLibsPath):
+    igeLibsPath = os.environ.get('IGE_LIBS')
+
+# If not exist, then error
+if not path.exists(igeLibsPath):
+    print("ERROR: IGE_LIBS was not set!")
+    exit(0)
+    
+json_inc_dir = path.join(igeLibsPath, 'json/include/json')
+
 sfc_module = Extension('igeGameAnalytics',
                     sources=[
                         'igeGameAnalytics.cpp',
                         'GAnalytics.cpp',
                         'win32/GameAnalyticsImpl.cpp',
                     ],
-                    include_dirs=['./', './win32', './bin/include'],
+                    include_dirs=[json_inc_dir, './', './win32', './bin/include'],
                     library_dirs=['bin/win32-vc141-mt-static/Release'],
 			        libraries=['GameAnalytics', 'libcurl', 'libssl', 'libcrypto', 'advapi32', 'ws2_32', 'crypt32', 'rpcrt4', 'ole32', 'kernel32', 'user32', 'gdi32', 'winspool', 'shell32', 'oleaut32', 'uuid', 'comdlg32'])
 
-setup(name='igeGameAnalytics', version='0.0.2',
+setup(name='igeGameAnalytics', version='0.0.3',
 		description= 'C++ extension GameAnalytics for 3D and 2D games.',
 		author=u'Indigames',
 		author_email='dev@indigames.net',

@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 
-
 PyObject* gameAnalytics_new(PyTypeObject* type, PyObject* args, PyObject* kw)
 {
 	gameAnalytics_obj* self = NULL;
@@ -16,6 +15,7 @@ PyObject* gameAnalytics_new(PyTypeObject* type, PyObject* args, PyObject* kw)
 
 void gameAnalytics_dealloc(gameAnalytics_obj* self)
 {
+	GAnalytics::Instance()->release();
 	Py_TYPE(self)->tp_free(self);
 }
 
@@ -28,16 +28,17 @@ PyObject* gameAnalytics_str(gameAnalytics_obj* self)
 
 static PyObject* gameAnalytics_Init(gameAnalytics_obj* self, PyObject* args, PyObject* kwargs)
 {
-	static char* kwlist[] = { "version", "game_key", "secret_key", "debug", NULL };
+	static char* kwlist[] = { "version", "game_key", "secret_key", "debug", "auto_test", NULL };
 		
     char* version = nullptr;
 	char* game_key = nullptr;
 	char* secret_key = nullptr;
 	int debug = 0;
+	int auto_test = 0;
     
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "sssi", kwlist, &version, &game_key, &secret_key, &debug)) return NULL;
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "sss|ii", kwlist, &version, &game_key, &secret_key, &debug, &auto_test)) return NULL;
 
-	GAnalytics::Instance()->init(version, game_key, secret_key, debug);
+	GAnalytics::Instance()->init(version, game_key, secret_key, debug, auto_test);
 
 	Py_INCREF(Py_None);
 	return Py_None;
