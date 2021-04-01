@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-file(TO_CMAKE_PATH $ENV{IGE_LIBS} IGE_LIBS)
-
 if (NOT DEFINED APP_STYLE)
     set(APP_STYLE STATIC)
 endif()
@@ -15,6 +13,13 @@ endif()
 project(${TARGET_NAME})
 
 set (CMAKE_CXX_STANDARD 17)
+
+# [IGE]: try include conan build config
+if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+endif()
+# [/IGE]
 
 if(DEFINED ANDROID_PLATFORM)
     set (ANDROID 1)
@@ -49,16 +54,7 @@ if(${APP_STYLE} MATCHES "SHARED")
     find_package(PythonInterp 3.7 REQUIRED)
     find_package(PythonLibs 3.7 REQUIRED)
 else()
-    set (PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Include")
-    if (MSVC)
-        list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/PC")
-    elseif (OSX)
-        list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Mac")
-    elseif (ANDROID)
-        list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Android")
-    elseif (IOS)
-        list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/IOS")
-    endif ()
+    set (PYTHON_INCLUDE_DIRS "${CONAN_INCLUDE_DIRS}")
 endif()
 
 file(GLOB SRC
@@ -68,8 +64,6 @@ file(GLOB SRC
 
 set(INCLUDES
     "${CMAKE_CURRENT_SOURCE_DIR}"
-    "${IGE_LIBS}/json/include"
-    "${IGE_LIBS}/json/include/json"
     "${PYTHON_INCLUDE_DIRS}"
 )
 

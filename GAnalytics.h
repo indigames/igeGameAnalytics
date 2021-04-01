@@ -32,7 +32,7 @@
 		#define LOG_ERROR(...) printf(__VA_ARGS__);
 	#endif
 #endif
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 class GameAnalyticsImpl;
