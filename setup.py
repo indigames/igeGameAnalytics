@@ -41,7 +41,8 @@ sfc_module = Extension('igeGameAnalytics',
                     ],
                     include_dirs=[json_inc_dir, './', './win32', './bin/include'],
                     library_dirs=['bin/win32-vc141-mt-static/Release'],
-			        libraries=['GameAnalytics', 'libcurl', 'libssl', 'libcrypto', 'advapi32', 'ws2_32', 'crypt32', 'rpcrt4', 'ole32', 'kernel32', 'user32', 'gdi32', 'winspool', 'shell32', 'oleaut32', 'uuid', 'comdlg32'])
+                    define_macros=[('BUILD_EXTENSION', '1')],
+                    libraries=['GameAnalytics', 'libcurl', 'libssl', 'libcrypto', 'advapi32', 'ws2_32', 'crypt32', 'rpcrt4', 'ole32', 'kernel32', 'user32', 'gdi32', 'winspool', 'shell32', 'oleaut32', 'uuid', 'comdlg32'])
 
 setup(name='igeGameAnalytics', version='0.0.3',
 		description= 'C++ extension GameAnalytics for 3D and 2D games.',
