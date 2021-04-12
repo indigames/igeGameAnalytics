@@ -1,6 +1,0 @@
-[requires]
-Python/3.7.6@ige/test
-json/3.9.1@ige/test
-
-[generators]
-cmake
