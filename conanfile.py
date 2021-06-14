@@ -1,5 +1,6 @@
 import os
-from conans import ConanFile, CMake
+from pathlib import Path
+from conans import ConanFile
 
 class IgeConan(ConanFile):
     name = 'igeGameAnalytics'
@@ -12,10 +13,11 @@ class IgeConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
-    generators = "cmake"
+    generators = "cmake_find_package"
     exports_sources = ""
     requires = []
     short_paths = True
+    revision_mode="scm"
 
     def requirements(self):
         self.requires("Python/3.7.6@ige/test")
